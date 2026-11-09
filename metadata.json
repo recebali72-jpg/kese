@@ -1,0 +1,6 @@
+{
+  "name": "Kuyu - Günlük Madencilik",
+  "description": "Kuyu mobil öncelikli günlük akçe madenciliği, çarkıfelek ve sıralama platformu.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

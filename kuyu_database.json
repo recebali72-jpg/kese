@@ -1,0 +1,227 @@
+{
+  "users": {
+    "mock_1": {
+      "id": "mock_1",
+      "email": "ahmet.kaya@kuyu.app",
+      "password": "password123",
+      "nickname": "ahmet_kaya",
+      "avatarUrl": null,
+      "joinedAt": 1791198310971,
+      "emailVerified": true,
+      "verificationCode": "123456",
+      "phone": "+905550000000",
+      "phoneVerified": true,
+      "inviteCode": "KUYU-MOCK1",
+      "invitedBy": null,
+      "invitedCount": 8,
+      "baseBalance": 89.7251,
+      "streak": 28,
+      "lastMiningSession": {
+        "startTime": 1794211510971,
+        "endTime": 1794297910971,
+        "dailyYield": 1.94,
+        "claimed": false
+      },
+      "wheel": {
+        "spinsAvailable": 1,
+        "lastDailySpinTime": 1794179110971,
+        "totalSpins": 5
+      }
+    },
+    "mock_2": {
+      "id": "mock_2",
+      "email": "deniz.alp@kuyu.app",
+      "password": "password123",
+      "nickname": "deniz_alp",
+      "avatarUrl": null,
+      "joinedAt": 1792062310971,
+      "emailVerified": true,
+      "verificationCode": "123456",
+      "phone": "+905550000001",
+      "phoneVerified": true,
+      "inviteCode": "KUYU-MOCK2",
+      "invitedBy": null,
+      "invitedCount": 4,
+      "baseBalance": 62.4109,
+      "streak": 19,
+      "lastMiningSession": {
+        "startTime": 1794182710971,
+        "endTime": 1794269110971,
+        "dailyYield": 1.86,
+        "claimed": false
+      },
+      "wheel": {
+        "spinsAvailable": 1,
+        "lastDailySpinTime": 1794179110971,
+        "totalSpins": 5
+      }
+    },
+    "mock_3": {
+      "id": "mock_3",
+      "email": "selin.demir@kuyu.app",
+      "password": "password123",
+      "nickname": "selin_demir",
+      "avatarUrl": null,
+      "joinedAt": 1792494310971,
+      "emailVerified": true,
+      "verificationCode": "123456",
+      "phone": "+905550000002",
+      "phoneVerified": true,
+      "inviteCode": "KUYU-MOCK3",
+      "invitedBy": null,
+      "invitedCount": 3,
+      "baseBalance": 49.1983,
+      "streak": 15,
+      "lastMiningSession": {
+        "startTime": 1794157510971,
+        "endTime": 1794243910971,
+        "dailyYield": 1.79,
+        "claimed": false
+      },
+      "wheel": {
+        "spinsAvailable": 1,
+        "lastDailySpinTime": 1794179110971,
+        "totalSpins": 5
+      }
+    },
+    "mock_4": {
+      "id": "mock_4",
+      "email": "kadir.k@kuyu.app",
+      "password": "password123",
+      "nickname": "anadolu_madenci",
+      "avatarUrl": null,
+      "joinedAt": 1792839910971,
+      "emailVerified": true,
+      "verificationCode": "123456",
+      "phone": "+905550000003",
+      "phoneVerified": true,
+      "inviteCode": "KUYU-MOCK4",
+      "invitedBy": null,
+      "invitedCount": 2,
+      "baseBalance": 37.892,
+      "streak": 12,
+      "lastMiningSession": {
+        "startTime": 1794193510971,
+        "endTime": 1794279910971,
+        "dailyYield": 1.72,
+        "claimed": false
+      },
+      "wheel": {
+        "spinsAvailable": 1,
+        "lastDailySpinTime": 1794179110971,
+        "totalSpins": 5
+      }
+    },
+    "mock_5": {
+      "id": "mock_5",
+      "email": "zeynep.avci@kuyu.app",
+      "password": "password123",
+      "nickname": "zeynep_avci",
+      "avatarUrl": null,
+      "joinedAt": 1793185510971,
+      "emailVerified": true,
+      "verificationCode": "123456",
+      "phone": "+905550000004",
+      "phoneVerified": true,
+      "inviteCode": "KUYU-MOCK5",
+      "invitedBy": null,
+      "invitedCount": 1,
+      "baseBalance": 24.502,
+      "streak": 8,
+      "lastMiningSession": {
+        "startTime": 1794139510971,
+        "endTime": 1794225910971,
+        "dailyYield": 1.52,
+        "claimed": false
+      },
+      "wheel": {
+        "spinsAvailable": 1,
+        "lastDailySpinTime": 1794179110971,
+        "totalSpins": 5
+      }
+    },
+    "mock_6": {
+      "id": "mock_6",
+      "email": "mert.ozkan@kuyu.app",
+      "password": "password123",
+      "nickname": "mert_ozkan",
+      "avatarUrl": null,
+      "joinedAt": 1793617510971,
+      "emailVerified": true,
+      "verificationCode": "123456",
+      "phone": "+905550000005",
+      "phoneVerified": true,
+      "inviteCode": "KUYU-MOCK6",
+      "invitedBy": null,
+      "invitedCount": 0,
+      "baseBalance": 16.32,
+      "streak": 5,
+      "lastMiningSession": null,
+      "wheel": {
+        "spinsAvailable": 1,
+        "lastDailySpinTime": 1794179110971,
+        "totalSpins": 5
+      }
+    },
+    "mock_7": {
+      "id": "mock_7",
+      "email": "elif.kara@kuyu.app",
+      "password": "password123",
+      "nickname": "elif_kara",
+      "avatarUrl": null,
+      "joinedAt": 1793876710971,
+      "emailVerified": true,
+      "verificationCode": "123456",
+      "phone": "+905550000006",
+      "phoneVerified": true,
+      "inviteCode": "KUYU-MOCK7",
+      "invitedBy": null,
+      "invitedCount": 0,
+      "baseBalance": 8.91,
+      "streak": 3,
+      "lastMiningSession": {
+        "startTime": 1794204310971,
+        "endTime": 1794290710971,
+        "dailyYield": 1.19,
+        "claimed": false
+      },
+      "wheel": {
+        "spinsAvailable": 1,
+        "lastDailySpinTime": 1794179110971,
+        "totalSpins": 5
+      }
+    },
+    "usr_697ff4ccbcafd119": {
+      "id": "usr_697ff4ccbcafd119",
+      "email": "test@kuyu.app",
+      "password": "password123",
+      "nickname": "test",
+      "avatarUrl": null,
+      "joinedAt": 1794222320669,
+      "emailVerified": false,
+      "verificationCode": "446784",
+      "phone": null,
+      "phoneVerified": false,
+      "inviteCode": "KUYU-7506",
+      "invitedBy": "mock_1",
+      "invitedCount": 0,
+      "baseBalance": 2.1,
+      "streak": 1,
+      "lastMiningSession": {
+        "startTime": 1794222324282,
+        "endTime": 1794308724282,
+        "dailyYield": 1,
+        "claimed": false
+      },
+      "wheel": {
+        "spinsAvailable": 0,
+        "lastDailySpinTime": 1794222327277,
+        "totalSpins": 1
+      }
+    }
+  },
+  "sessions": {
+    "tok_18fe334e444a4fea712ba706a78f9782": "usr_697ff4ccbcafd119",
+    "tok_94d489090261b2996e8296ffb596c892": "mock_1"
+  }
+}

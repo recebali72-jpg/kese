@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stopColor="#1e3f52" />
+      <stop offset="100%" stopColor="#0e1f2b" />
+    </radialGradient>
+    <radialGradient id="keseGrad" cx="42%" cy="46%" r="58%">
+      <stop offset="0%" stopColor="#f59e0b" />
+      <stop offset="35%" stopColor="#d97706" />
+      <stop offset="70%" stopColor="#b45309" />
+      <stop offset="100%" stopColor="#78350f" />
+    </radialGradient>
+    <linearGradient id="ruffleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stopColor="#fbbf24" />
+      <stop offset="60%" stopColor="#d97706" />
+      <stop offset="100%" stopColor="#92400e" />
+    </linearGradient>
+    <radialGradient id="akceGold" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stopColor="#fef08a" />
+      <stop offset="40%" stopColor="#f59e0b" />
+      <stop offset="100%" stopColor="#92400e" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background rounded squircle -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" />
+  <rect width="504" height="504" x="4" y="4" rx="124" fill="none" stroke="#f2b544" stroke-width="4" stroke-opacity="0.35" />
+
+  <!-- Outer gold coin halo -->
+  <circle cx="256" cy="275" r="175" fill="#f2b544" fill-opacity="0.08" />
+
+  <!-- Ruffled pouch neck -->
+  <path
+    d="M 180 135 
+       C 200 160, 220 130, 256 130 
+       C 292 130, 312 160, 332 135 
+       C 320 175, 296 182, 256 182 
+       C 216 182, 192 175, 180 135 Z"
+    fill="url(#ruffleGrad)"
+    stroke="#78350f"
+    stroke-width="7"
+    stroke-linejoin="round"
+  />
+
+  <!-- Main Pouch Plump Body -->
+  <path
+    d="M 205 182 
+       C 140 215, 100 270, 100 345 
+       C 100 425, 170 455, 256 455 
+       C 342 455, 412 425, 412 345 
+       C 412 270, 372 215, 307 182 
+       Z"
+    fill="url(#keseGrad)"
+    stroke="#5c2406"
+    stroke-width="10"
+  />
+
+  <!-- Braided Cord Wrap -->
+  <path
+    d="M 195 182 Q 256 198, 317 182"
+    stroke="#fef08a"
+    stroke-width="14"
+    stroke-linecap="round"
+  />
+  <path
+    d="M 195 182 Q 256 198, 317 182"
+    stroke="#78350f"
+    stroke-width="3.5"
+    stroke-dasharray="7 7"
+  />
+
+  <!-- Tie Knot & Tassels -->
+  <ellipse cx="256" cy="190" rx="18" ry="14" fill="#fef08a" stroke="#78350f" stroke-width="5" />
+  <path d="M 245 200 Q 230 230 220 260 M 267 200 Q 282 230 292 260" stroke="#fef08a" stroke-width="8" stroke-linecap="round" />
+  
+  <!-- Tassels -->
+  <polygon points="210,260 230,260 238,290 202,290" fill="#f59e0b" stroke="#78350f" stroke-width="4" />
+  <polygon points="282,260 302,260 310,290 274,290" fill="#f59e0b" stroke="#78350f" stroke-width="4" />
+
+  <!-- Classical Embossed Akçe Medallion -->
+  <circle cx="256" cy="335" r="62" fill="url(#akceGold)" stroke="#78350f" stroke-width="7" />
+  <circle cx="256" cy="335" r="52" stroke="#78350f" stroke-width="4.5" stroke-dasharray="4.5 7" fill="none" opacity="0.9" />
+  <circle cx="256" cy="335" r="42" stroke="#92400e" stroke-width="2.5" fill="none" opacity="0.6" />
+
+  <!-- Classical Ottoman Tuğra / Calligraphic Relief on Akçe -->
+  <path
+    d="M 226 348 C 230 322, 246 312, 266 312 C 278 312, 286 320, 278 334 C 266 348, 246 352, 230 348 Z"
+    stroke="#5c2406"
+    stroke-width="4.5"
+    fill="none"
+    stroke-linecap="round"
+  />
+  <path
+    d="M 258 304 L 258 356 M 270 308 L 270 348 M 246 314 L 246 344"
+    stroke="#5c2406"
+    stroke-width="4"
+    stroke-linecap="round"
+  />
+  <circle cx="279" cy="319" r="3.5" fill="#5c2406" />
+</svg>
