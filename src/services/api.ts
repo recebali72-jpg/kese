@@ -72,17 +72,18 @@ export async function apiLogin(
 }
 
 export async function apiGetMe(): Promise<{ user: User; liveBalance: number; serverTime: number } | null> {
+  const token = localStorage.getItem('kuyu_token');
+  if (!token) return null;
+
   try {
     const res = await fetch('/api/auth/me', {
       headers: { ...getAuthHeader() },
     });
     if (!res.ok) {
+      localStorage.removeItem('kuyu_token');
       return null;
     }
     const data = await res.json();
-    if (data.token) {
-      localStorage.setItem('kuyu_token', data.token);
-    }
     if (data.serverTime) {
       serverTimeOffset = data.serverTime - Date.now();
     }

@@ -14,7 +14,7 @@
       "inviteCode": "KUYU-MOCK1",
       "invitedBy": null,
       "invitedCount": 8,
-      "baseBalance": 91.6651,
+      "baseBalance": 91.7651,
       "streak": 28,
       "lastMiningSession": {
         "startTime": 1794211510971,
@@ -23,9 +23,9 @@
         "claimed": true
       },
       "wheel": {
-        "spinsAvailable": 1,
-        "lastDailySpinTime": 1794179110971,
-        "totalSpins": 5
+        "spinsAvailable": 0,
+        "lastDailySpinTime": 1794315938507,
+        "totalSpins": 6
       }
     },
     "mock_2": {
@@ -223,6 +223,7 @@
   "sessions": {
     "tok_18fe334e444a4fea712ba706a78f9782": "usr_697ff4ccbcafd119",
     "tok_94d489090261b2996e8296ffb596c892": "mock_1",
-    "tok_b1e86ab8f32373b90e112a7dd1a57631": "mock_1"
+    "tok_b1e86ab8f32373b90e112a7dd1a57631": "mock_1",
+    "tok_e2a670529b84ba1eb2dbff92e9b45dc6": "mock_1"
   }
 }

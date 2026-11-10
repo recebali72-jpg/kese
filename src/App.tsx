@@ -9,9 +9,10 @@ import { WheelTab } from './components/WheelTab';
 import { LeaderboardTab } from './components/LeaderboardTab';
 import { AboutTab } from './components/AboutTab';
 import { ProfileModal } from './components/ProfileModal';
+import { LoginPage } from './components/LoginPage';
 
 const AppContent: React.FC = () => {
-  const { loading, isMiningActive, theme } = useAuth();
+  const { user, loading, isMiningActive, theme } = useAuth();
   const { t } = useLanguage();
   const [currentTab, setCurrentTab] = useState<TabType>('mining');
   const [profileOpen, setProfileOpen] = useState<boolean>(false);
@@ -23,6 +24,11 @@ const AppContent: React.FC = () => {
         <span className="text-sm font-bold tracking-wider text-[#d97706] dark:text-[#f2b544]">{t.loading}</span>
       </div>
     );
+  }
+
+  // If user is not logged in, render the dedicated LoginPage
+  if (!user) {
+    return <LoginPage />;
   }
 
   return (

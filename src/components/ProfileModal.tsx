@@ -9,6 +9,7 @@ import {
   Trash2,
   Copy,
   Check,
+  LogOut,
   Flame,
   Trophy,
   Mail,
@@ -23,7 +24,7 @@ interface ProfileModalProps {
 }
 
 export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, currentUserRank = 1 }) => {
-  const { user, liveAkce, updateProfile, verifyEmail, verifyPhone } = useAuth();
+  const { user, liveAkce, updateProfile, logout, verifyEmail, verifyPhone } = useAuth();
   const { t, language } = useLanguage();
 
   const [nicknameInput, setNicknameInput] = useState(user?.nickname || '');
@@ -425,6 +426,18 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
             </div>
           )}
         </div>
+
+        {/* Logout Button */}
+        <button
+          onClick={() => {
+            logout();
+            onClose();
+          }}
+          className="w-full mt-1 py-2.5 rounded-xl border border-rose-300 dark:border-[#e8616b]/50 text-rose-600 dark:text-[#e8616b] hover:bg-rose-50 dark:hover:bg-[#e8616b]/15 font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
+        >
+          <LogOut className="w-4 h-4" />
+          <span>{t.logout}</span>
+        </button>
       </div>
     </div>
   );

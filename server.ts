@@ -274,18 +274,18 @@ function checkWheelDailySpin(user: UserRecord, now: number): boolean {
   return changed;
 }
 
-// Get user from Authorization header, fallback to default user so user never needs a login page
-function getAuthUser(req: express.Request): UserRecord {
+// Get user from Authorization header
+function getAuthUser(req: express.Request): UserRecord | null {
   const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    const token = authHeader.substring(7);
-    const userId = db.sessions[token];
-    if (userId && db.users[userId]) {
-      return db.users[userId];
-    }
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return null;
   }
-  const defaultUser = db.users['mock_1'] || Object.values(db.users)[0];
-  return defaultUser;
+  const token = authHeader.substring(7);
+  const userId = db.sessions[token];
+  if (!userId || !db.users[userId]) {
+    return null;
+  }
+  return db.users[userId];
 }
 
 async function startServer() {
@@ -507,12 +507,8 @@ async function startServer() {
   // Auth: Me
   app.get('/api/auth/me', (req, res) => {
     const user = getAuthUser(req);
-    const authHeader = req.headers.authorization;
-    let token: string | undefined = undefined;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      token = 'tok_' + crypto.randomBytes(16).toString('hex');
-      db.sessions[token] = user.id;
-      saveDB(db);
+    if (!user) {
+      return res.status(401).json({ error: 'Oturum bulunamadı.' });
     }
     const now = Date.now();
     const changedMining = settleUserMiningSession(user, now);
@@ -524,7 +520,6 @@ async function startServer() {
     const liveBalance = computeUserLiveBalance(user, now);
 
     res.json({
-      token,
       user: {
         id: user.id,
         email: user.email,
