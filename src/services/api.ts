@@ -48,11 +48,23 @@ export async function apiRegister(
   const res = await fetch('/api/auth/register', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password, inviteCode, phone }),
+    body: JSON.stringify({ email: email.trim(), password, inviteCode: inviteCode?.trim() || undefined, phone }),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Kayıt başarısız oldu.');
-  localStorage.setItem('kuyu_token', data.token);
+  
+  const text = await res.text();
+  let data: any = {};
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error('Sunucu beklenmeyen bir yanıt verdi. Lütfen tekrar deneyin.');
+  }
+
+  if (!res.ok) {
+    throw new Error(data.error || 'Kayıt başarısız oldu.');
+  }
+  if (data.token) {
+    localStorage.setItem('kuyu_token', data.token);
+  }
   return data;
 }
 
@@ -63,11 +75,23 @@ export async function apiLogin(
   const res = await fetch('/api/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email: email.trim(), password }),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Giriş başarısız oldu.');
-  localStorage.setItem('kuyu_token', data.token);
+  
+  const text = await res.text();
+  let data: any = {};
+  try {
+    data = JSON.parse(text);
+  } catch {
+    throw new Error('Sunucu beklenmeyen bir yanıt verdi. Lütfen tekrar deneyin.');
+  }
+
+  if (!res.ok) {
+    throw new Error(data.error || 'Giriş başarısız oldu.');
+  }
+  if (data.token) {
+    localStorage.setItem('kuyu_token', data.token);
+  }
   return data;
 }
 

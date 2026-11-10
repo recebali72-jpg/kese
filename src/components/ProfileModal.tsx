@@ -14,7 +14,8 @@ import {
   Trophy,
   Mail,
   Phone,
-  AlertCircle
+  AlertCircle,
+  Globe
 } from 'lucide-react';
 
 interface ProfileModalProps {
@@ -25,7 +26,7 @@ interface ProfileModalProps {
 
 export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, currentUserRank = 1 }) => {
   const { user, liveAkce, updateProfile, logout, verifyEmail, verifyPhone } = useAuth();
-  const { t, language } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
 
   const [nicknameInput, setNicknameInput] = useState(user?.nickname || '');
   const [savingNick, setSavingNick] = useState(false);
@@ -332,6 +333,43 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
                   <span>{t.copy}</span>
                 </>
               )}
+            </button>
+          </div>
+        </div>
+
+        {/* Language Selection Setting */}
+        <div className="bg-slate-50 dark:bg-[#0e1f2b] p-3 rounded-2xl border border-slate-200 dark:border-[#274858] flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Globe className="w-4 h-4 text-[#d97706] dark:text-[#f2b544]" />
+            <div className="flex flex-col">
+              <span className="text-xs font-bold text-slate-900 dark:text-white">{t.languageSelectLabel}</span>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                {language === 'tr' ? 'Türkçe (TR)' : 'English (EN)'}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center p-0.5 rounded-xl bg-white dark:bg-[#16303f] border border-slate-200 dark:border-[#274858] text-[11px] font-bold shadow-2xs">
+            <button
+              onClick={() => setLanguage('tr')}
+              className={`px-2 py-1 rounded-lg flex items-center gap-1 transition-all cursor-pointer ${
+                language === 'tr'
+                  ? 'bg-amber-100 dark:bg-[#f2b544]/25 text-[#d97706] dark:text-[#f2b544] font-black'
+                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white opacity-60'
+              }`}
+            >
+              <span>🇹🇷</span>
+              <span>TR</span>
+            </button>
+            <button
+              onClick={() => setLanguage('en')}
+              className={`px-2 py-1 rounded-lg flex items-center gap-1 transition-all cursor-pointer ${
+                language === 'en'
+                  ? 'bg-amber-100 dark:bg-[#f2b544]/25 text-[#d97706] dark:text-[#f2b544] font-black'
+                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white opacity-60'
+              }`}
+            >
+              <span>🇬🇧</span>
+              <span>EN</span>
             </button>
           </div>
         </div>

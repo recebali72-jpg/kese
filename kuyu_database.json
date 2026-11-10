@@ -218,12 +218,61 @@
         "lastDailySpinTime": 1794222327277,
         "totalSpins": 1
       }
+    },
+    "usr_5d088ef298229ccc": {
+      "id": "usr_5d088ef298229ccc",
+      "email": "testuser@example.com",
+      "password": "password123",
+      "nickname": "testuser",
+      "avatarUrl": null,
+      "joinedAt": 1794321705743,
+      "emailVerified": false,
+      "verificationCode": "659380",
+      "phone": null,
+      "phoneVerified": false,
+      "inviteCode": "KESE-4095",
+      "invitedBy": null,
+      "invitedCount": 0,
+      "baseBalance": 0,
+      "streak": 1,
+      "lastMiningSession": null,
+      "wheel": {
+        "spinsAvailable": 1,
+        "lastDailySpinTime": 1794231705743,
+        "totalSpins": 0
+      }
+    },
+    "usr_e52b7ebcf200c80d": {
+      "id": "usr_e52b7ebcf200c80d",
+      "email": "yeni_kayit@kese.app",
+      "password": "password123",
+      "nickname": "yeni_kayit",
+      "avatarUrl": null,
+      "joinedAt": 1794322040234,
+      "emailVerified": false,
+      "verificationCode": "628289",
+      "phone": null,
+      "phoneVerified": false,
+      "inviteCode": "KESE-3538",
+      "invitedBy": null,
+      "invitedCount": 0,
+      "baseBalance": 0,
+      "streak": 1,
+      "lastMiningSession": null,
+      "wheel": {
+        "spinsAvailable": 1,
+        "lastDailySpinTime": 1794232040234,
+        "totalSpins": 0
+      }
     }
   },
   "sessions": {
     "tok_18fe334e444a4fea712ba706a78f9782": "usr_697ff4ccbcafd119",
     "tok_94d489090261b2996e8296ffb596c892": "mock_1",
     "tok_b1e86ab8f32373b90e112a7dd1a57631": "mock_1",
-    "tok_e2a670529b84ba1eb2dbff92e9b45dc6": "mock_1"
+    "tok_e2a670529b84ba1eb2dbff92e9b45dc6": "mock_1",
+    "tok_008b98e8ee3f197560ea60778d7f9c31": "usr_5d088ef298229ccc",
+    "tok_87441ead587d2103ccf65f6c1e2a5e44": "usr_e52b7ebcf200c80d",
+    "tok_f071032327761eaf795b475e25319cc9": "usr_e52b7ebcf200c80d"
   }
 }

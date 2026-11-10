@@ -11,7 +11,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onOpenProfile }) => {
   const { user, liveAkce, theme, toggleTheme, notificationsEnabled, requestNotificationPermission } = useAuth();
-  const { language, toggleLanguage, t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between px-3.5 py-3 bg-white/95 dark:bg-[#16303f]/95 backdrop-blur-md border-b border-slate-200 dark:border-[#274858] transition-colors shadow-xs">
@@ -64,17 +64,35 @@ export const Header: React.FC<HeaderProps> = ({ onOpenProfile }) => {
 
         {/* Action icons */}
         <div className="flex items-center gap-1">
-          {/* Language Toggle Button */}
-          <button
-            onClick={toggleLanguage}
-            className="px-1.5 py-1 rounded-lg text-[10px] font-black tracking-wider uppercase bg-slate-100 dark:bg-[#274858] text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-[#345d73] transition-colors focus-visible:ring-2 focus-visible:ring-[#f2b544] border border-slate-200 dark:border-transparent flex items-center gap-0.5"
-            title={t.langSwitch}
-            aria-label={t.langSwitch}
-          >
-            <span className={language === 'tr' ? 'text-[#d97706] dark:text-[#f2b544] font-black' : 'opacity-40'}>TR</span>
-            <span className="opacity-30">/</span>
-            <span className={language === 'en' ? 'text-[#d97706] dark:text-[#f2b544] font-black' : 'opacity-40'}>EN</span>
-          </button>
+          {/* Prominent Language Switcher */}
+          <div className="flex items-center p-0.5 rounded-xl bg-slate-100 dark:bg-[#0e1f2b] border border-slate-200 dark:border-[#274858] text-[10px] font-bold shadow-2xs">
+            <button
+              onClick={() => setLanguage('tr')}
+              className={`px-1.5 py-0.5 rounded-lg flex items-center gap-1 transition-all cursor-pointer ${
+                language === 'tr'
+                  ? 'bg-white dark:bg-[#16303f] text-[#d97706] dark:text-[#f2b544] shadow-xs font-black'
+                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white opacity-60'
+              }`}
+              title="Türkçe"
+              aria-label="Türkçe"
+            >
+              <span>🇹🇷</span>
+              <span>TR</span>
+            </button>
+            <button
+              onClick={() => setLanguage('en')}
+              className={`px-1.5 py-0.5 rounded-lg flex items-center gap-1 transition-all cursor-pointer ${
+                language === 'en'
+                  ? 'bg-white dark:bg-[#16303f] text-[#d97706] dark:text-[#f2b544] shadow-xs font-black'
+                  : 'text-slate-500 hover:text-slate-900 dark:hover:text-white opacity-60'
+              }`}
+              title="English"
+              aria-label="English"
+            >
+              <span>🇬🇧</span>
+              <span>EN</span>
+            </button>
+          </div>
 
           <button
             onClick={toggleTheme}

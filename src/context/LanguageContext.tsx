@@ -29,6 +29,9 @@ export interface Translations {
   notificationsOn: string;
   notificationsOff: string;
   langSwitch: string;
+  languageSelectLabel: string;
+  turkish: string;
+  english: string;
 
   // Tabs
   tabPouch: string;
@@ -152,6 +155,9 @@ const translations: Record<Language, Translations> = {
     notificationsOn: 'Bildirimler etkin',
     notificationsOff: 'Bildirimleri aç',
     langSwitch: 'Dil Değiştir',
+    languageSelectLabel: 'Dil Seçeneği',
+    turkish: 'Türkçe',
+    english: 'English',
 
     tabPouch: 'Kese',
     tabWheel: 'Çark',
@@ -266,6 +272,9 @@ const translations: Record<Language, Translations> = {
     notificationsOn: 'Notifications enabled',
     notificationsOff: 'Enable notifications',
     langSwitch: 'Switch Language',
+    languageSelectLabel: 'Language',
+    turkish: 'Türkçe',
+    english: 'English',
 
     tabPouch: 'Kese',
     tabWheel: 'Wheel',

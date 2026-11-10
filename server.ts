@@ -8,7 +8,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = Number(process.env.PORT) || 3000;
-const DB_FILE = path.resolve(__dirname, 'kuyu_database.json');
+const LOCAL_DB_FILE = path.resolve(__dirname, 'kuyu_database.json');
+let DB_FILE = LOCAL_DB_FILE;
+try {
+  if (fs.existsSync(LOCAL_DB_FILE)) {
+    fs.accessSync(LOCAL_DB_FILE, fs.constants.W_OK);
+  } else {
+    fs.accessSync(__dirname, fs.constants.W_OK);
+  }
+} catch {
+  DB_FILE = path.resolve('/tmp', 'kuyu_database.json');
+}
 
 // Interface for database storage
 interface UserRecord {
@@ -196,6 +206,12 @@ function loadDB(): Database {
       if (data && data.users) {
         return data;
       }
+    } else if (fs.existsSync(LOCAL_DB_FILE)) {
+      const data = JSON.parse(fs.readFileSync(LOCAL_DB_FILE, 'utf-8'));
+      if (data && data.users) {
+        saveDB(data);
+        return data;
+      }
     }
   } catch (err) {
     console.error('Error loading database, initializing fresh:', err);
@@ -213,6 +229,13 @@ function saveDB(db: Database) {
     fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2), 'utf-8');
   } catch (err) {
     console.error('Error saving database:', err);
+    try {
+      const fallbackPath = path.resolve('/tmp', 'kuyu_database.json');
+      fs.writeFileSync(fallbackPath, JSON.stringify(db, null, 2), 'utf-8');
+      DB_FILE = fallbackPath;
+    } catch (e) {
+      console.error('Emergency save fallback failed:', e);
+    }
   }
 }
 
