@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { formatAkce, formatTimeCountdown } from '../services/api';
 import { Flame, Users, AlertCircle, Sparkles } from 'lucide-react';
-import { AnimatedKese } from './KeseIcon';
+import { AnimatedKese, KeseIcon } from './KeseIcon';
 
 export const MiningTab: React.FC = () => {
   const {
@@ -15,6 +16,7 @@ export const MiningTab: React.FC = () => {
     startMining,
     stats
   } = useAuth();
+  const { t } = useLanguage();
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -50,12 +52,8 @@ export const MiningTab: React.FC = () => {
         <div className="bg-[#e8616b]/15 border-2 border-[#e8616b] text-[#e8616b] px-4 py-3 rounded-2xl flex items-center gap-3 animate-pulse">
           <AlertCircle className="w-5 h-5 shrink-0" />
           <div className="text-xs font-semibold leading-relaxed">
-            <span className="font-bold block text-sm">Serini Koru!</span>
-            Serini korumak için{' '}
-            <span className="font-mono font-bold underline">
-              {formatTimeCountdown(graceRemainingMs)}
-            </span>{' '}
-            içinde başla!
+            <span className="font-bold block text-sm">{t.streakProtectTitle}</span>
+            {t.streakProtectDesc.replace('{time}', formatTimeCountdown(graceRemainingMs))}
           </div>
         </div>
       )}
@@ -115,11 +113,11 @@ export const MiningTab: React.FC = () => {
                 </div>
                 <div className="mt-1 flex flex-col items-center bg-emerald-50 dark:bg-[#5fd3b3]/15 px-2.5 py-0.5 rounded-xl border border-emerald-200 dark:border-[#5fd3b3]/30 shadow-xs">
                   <span className="text-[9px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider leading-none mb-0.5">
-                    Bu Oturumda Biriken
+                    {t.sessionAccumulated}
                   </span>
                   <div className="flex items-center gap-1 font-mono text-xs font-black text-[#059669] dark:text-[#5fd3b3] tracking-tight">
                     <span>+{formatAkce(sessionEarnedAkce)}</span>
-                    <span className="font-sans font-medium text-[9px] text-slate-500 dark:text-slate-400">akçe</span>
+                    <span className="font-sans font-medium text-[9px] text-slate-500 dark:text-slate-400">{t.akce}</span>
                   </div>
                 </div>
               </div>
@@ -129,16 +127,16 @@ export const MiningTab: React.FC = () => {
                 onClick={handleStartMining}
                 disabled={loading}
                 className="w-[185px] h-[185px] rounded-full bg-gradient-to-tr from-[#f2b544] via-[#f7c768] to-[#f2b544] text-[#0e1f2b] font-black text-sm uppercase tracking-tight flex flex-col items-center justify-center shadow-xl shadow-[#f2b544]/25 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-4 focus-visible:ring-[#f2b544]/50 group px-2"
-                aria-label="Keseyi doldur"
+                aria-label={t.miningStart}
               >
                 <div className="scale-90 -my-0.5 group-hover:scale-100 transition-transform duration-300">
                   <AnimatedKese isActive={false} className="w-18 h-18" />
                 </div>
                 <span className="leading-tight text-center px-1 font-extrabold text-sm text-[#0e1f2b]">
-                  {loading ? 'Başlatılıyor...' : 'Keseyi Doldur'}
+                  {loading ? t.miningStarting : t.miningStart}
                 </span>
                 <span className="text-[10px] font-bold normal-case tracking-normal opacity-85 mt-0.5 text-[#0e1f2b]">
-                  24 saatlik dolum
+                  {t.miningCycle}
                 </span>
               </button>
             )}
@@ -155,13 +153,13 @@ export const MiningTab: React.FC = () => {
             <Flame className="w-4 h-4 fill-current" />
           </div>
           <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">
-            Günlük Seri
+            {t.dailyStreak}
           </span>
           <span className="text-base font-extrabold text-slate-900 dark:text-white mt-0.5">
-            {user?.streak || 1}. Gün
+            {user?.streak || 1}. {t.day}
           </span>
           <span className="text-[9px] text-[#059669] dark:text-[#5fd3b3] mt-0.5 font-medium">
-            Her gün +bonus
+            {t.streakEveryDayBonus}
           </span>
         </div>
 
@@ -171,13 +169,13 @@ export const MiningTab: React.FC = () => {
             <Sparkles className="w-4 h-4" />
           </div>
           <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">
-            Günlük Kazanç
+            {t.dailyYield}
           </span>
           <span className="text-base font-extrabold text-[#d97706] dark:text-[#f2b544] mt-0.5 font-mono">
             +{formatAkce(currentDailyYield).split(',')[0]},{formatAkce(currentDailyYield).split(',')[1].slice(0, 2)}
           </span>
           <span className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
-            akçe / 24 saat
+            {t.per24h}
           </span>
         </div>
 
@@ -187,13 +185,13 @@ export const MiningTab: React.FC = () => {
             <Users className="w-4 h-4" />
           </div>
           <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">
-            Davet Edilen
+            {t.invitedCount}
           </span>
           <span className="text-base font-extrabold text-slate-900 dark:text-white mt-0.5">
-            {user?.invitedCount || 0} Kişi
+            {user?.invitedCount || 0} {t.people}
           </span>
           <span className="text-[9px] text-[#d97706] dark:text-[#f2b544] mt-0.5 font-medium">
-            +5 akçe/davet
+            {t.perInviteBonus}
           </span>
         </div>
       </div>
@@ -205,10 +203,9 @@ export const MiningTab: React.FC = () => {
             <Users className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xs font-bold text-slate-900 dark:text-white">Arkadaşını Davet Et</div>
+            <div className="text-xs font-bold text-slate-900 dark:text-white">{t.inviteFriendTitle}</div>
             <div className="text-[11px] text-slate-600 dark:text-slate-300">
-              Sana <span className="text-[#d97706] dark:text-[#f2b544] font-bold">+5 akçe</span>, arkadaşına{' '}
-              <span className="text-[#059669] dark:text-[#5fd3b3] font-bold">+2 akçe</span> hoş geldin bonusu.
+              {t.inviteFriendDesc}
             </div>
           </div>
         </div>
@@ -217,34 +214,43 @@ export const MiningTab: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Global Community Stats Card: exactly three numbers, no charts! */}
-      <div className="bg-white dark:bg-[#16303f] border border-slate-200 dark:border-[#274858] rounded-2xl p-4 shadow-xs">
-        <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3 text-center">
-          Topluluk Kese Durumu
+      {/* Bottom Global Community Stats Card: Registered, Active Pouches, Active Rate, and Total Akçe */}
+      <div className="bg-white dark:bg-[#16303f] border border-slate-200 dark:border-[#274858] rounded-2xl p-3.5 shadow-xs">
+        <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2.5 text-center flex items-center justify-center gap-1.5">
+          <KeseIcon className="w-3.5 h-3.5 text-[#d97706] dark:text-[#f2b544]" />
+          <span>{t.communityStatusTitle}</span>
         </div>
-        <div className="grid grid-cols-3 divide-x divide-slate-200 dark:divide-[#274858] text-center">
-          <div className="px-2">
-            <div className="text-lg font-extrabold text-slate-900 dark:text-white">
+        <div className="grid grid-cols-4 divide-x divide-slate-200 dark:divide-[#274858] text-center">
+          <div className="px-1">
+            <div className="text-sm font-extrabold text-slate-900 dark:text-white">
               {stats?.registeredCount ?? 1}
             </div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5 leading-tight">
-              Kayıtlı Kişi
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5 leading-tight">
+              {t.registeredCount}
             </div>
           </div>
-          <div className="px-2">
-            <div className="text-lg font-extrabold text-[#059669] dark:text-[#5fd3b3]">
+          <div className="px-1">
+            <div className="text-sm font-extrabold text-[#059669] dark:text-[#5fd3b3]">
               {stats?.activeMinersCount ?? 0}
             </div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5 leading-tight">
-              Aktif Kese
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5 leading-tight">
+              {t.activePouches}
             </div>
           </div>
-          <div className="px-2">
-            <div className="text-lg font-extrabold text-[#d97706] dark:text-[#f2b544]">
+          <div className="px-1">
+            <div className="text-sm font-extrabold text-[#d97706] dark:text-[#f2b544]">
               %{stats?.activeRatePercent ?? 0}
             </div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5 leading-tight">
-              Aktif Oranı
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5 leading-tight">
+              {t.activeRate}
+            </div>
+          </div>
+          <div className="px-1">
+            <div className="text-sm font-extrabold text-amber-600 dark:text-amber-400 font-mono">
+              {formatAkce(stats?.totalAkce ?? 0).split(',')[0]}
+            </div>
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5 leading-tight">
+              {t.totalCommunityAkce}
             </div>
           </div>
         </div>

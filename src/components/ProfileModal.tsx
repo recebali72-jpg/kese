@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { formatAkce } from '../services/api';
 import { KlasikAkce } from './KeseIcon';
 import {
@@ -8,17 +9,12 @@ import {
   Trash2,
   Copy,
   Check,
-  LogOut,
   Flame,
-  Coins,
   Trophy,
-  ShieldCheck,
   Mail,
   Phone,
-  AlertCircle,
-  Download
+  AlertCircle
 } from 'lucide-react';
-import { PWAInstallModal } from './PWAInstallModal';
 
 interface ProfileModalProps {
   isOpen: boolean;
@@ -27,7 +23,8 @@ interface ProfileModalProps {
 }
 
 export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, currentUserRank = 1 }) => {
-  const { user, liveAkce, updateProfile, logout, verifyEmail, verifyPhone } = useAuth();
+  const { user, liveAkce, updateProfile, verifyEmail, verifyPhone } = useAuth();
+  const { t, language } = useLanguage();
 
   const [nicknameInput, setNicknameInput] = useState(user?.nickname || '');
   const [savingNick, setSavingNick] = useState(false);
@@ -45,15 +42,12 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
   const [phoneInput, setPhoneInput] = useState('');
   const [phoneVerifyLoading, setPhoneVerifyLoading] = useState(false);
 
-  // PWA install guide modal
-  const [showInstallModal, setShowInstallModal] = useState(false);
-
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   if (!isOpen || !user) return null;
 
-  // Format joined date
-  const joinedDateStr = new Intl.DateTimeFormat('tr-TR', {
+  // Format joined date according to active language
+  const joinedDateStr = new Intl.DateTimeFormat(language === 'en' ? 'en-US' : 'tr-TR', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -65,7 +59,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-      setErrorMessage('Lütfen geçerli bir resim dosyası seçin.');
+      setErrorMessage(language === 'en' ? 'Please select a valid image file.' : 'Lütfen geçerli bir resim dosyası seçin.');
       return;
     }
 
@@ -102,7 +96,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
           await updateProfile(undefined, dataUrl);
           setErrorMessage(null);
         } catch (err: unknown) {
-          setErrorMessage(err instanceof Error ? err.message : 'Fotoğraf kaydedilemedi.');
+          setErrorMessage(err instanceof Error ? err.message : (language === 'en' ? 'Failed to save photo.' : 'Fotoğraf kaydedilemedi.'));
         }
       };
       img.src = event.target?.result as string;
@@ -115,14 +109,14 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
       await updateProfile(undefined, null);
       if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (err: unknown) {
-      setErrorMessage(err instanceof Error ? err.message : 'Fotoğraf kaldırılamadı.');
+      setErrorMessage(err instanceof Error ? err.message : (language === 'en' ? 'Failed to remove photo.' : 'Fotoğraf kaldırılamadı.'));
     }
   };
 
   const handleSaveNickname = async () => {
     const clean = nicknameInput.trim();
     if (clean.length < 2) {
-      setErrorMessage('Takma ad en az 2 karakter olmalıdır.');
+      setErrorMessage(language === 'en' ? 'Nickname must be at least 2 characters.' : 'Takma ad en az 2 karakter olmalıdır.');
       return;
     }
     try {
@@ -132,7 +126,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
       setNickSuccess(true);
       setTimeout(() => setNickSuccess(false), 2500);
     } catch (err: unknown) {
-      setErrorMessage(err instanceof Error ? err.message : 'Takma ad güncellenemedi.');
+      setErrorMessage(err instanceof Error ? err.message : (language === 'en' ? 'Failed to update nickname.' : 'Takma ad güncellenemedi.'));
     } finally {
       setSavingNick(false);
     }
@@ -151,7 +145,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
       await verifyEmail(emailCodeInput.trim());
       setShowEmailVerify(false);
     } catch (err: unknown) {
-      setErrorMessage(err instanceof Error ? err.message : 'Kod doğrulanamadı.');
+      setErrorMessage(err instanceof Error ? err.message : (language === 'en' ? 'Verification code invalid.' : 'Kod doğrulanamadı.'));
     } finally {
       setEmailVerifyLoading(false);
     }
@@ -164,7 +158,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
       await verifyPhone(phoneInput.trim());
       setShowPhoneVerify(false);
     } catch (err: unknown) {
-      setErrorMessage(err instanceof Error ? err.message : 'Telefon doğrulanamadı.');
+      setErrorMessage(err instanceof Error ? err.message : (language === 'en' ? 'Phone verification failed.' : 'Telefon doğrulanamadı.'));
     } finally {
       setPhoneVerifyLoading(false);
     }
@@ -182,13 +176,13 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#274858] transition-colors focus-visible:ring-2 focus-visible:ring-[#f2b544]"
-          aria-label="Kapat"
+          aria-label={t.close}
         >
           <X className="w-5 h-5" />
         </button>
 
         <h2 id="profile-title" className="text-lg font-black text-slate-900 dark:text-white text-center">
-          Kese Profili
+          {t.profileTitle}
         </h2>
 
         {errorMessage && (
@@ -216,8 +210,8 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
             <button
               onClick={() => fileInputRef.current?.click()}
               className="absolute bottom-0 right-0 p-2 rounded-full bg-[#f2b544] text-[#0e1f2b] shadow-md hover:scale-110 active:scale-95 transition-transform"
-              title="Fotoğrafı Değiştir"
-              aria-label="Fotoğrafı değiştir"
+              title={t.changePhoto}
+              aria-label={t.changePhoto}
             >
               <Camera className="w-4 h-4" />
             </button>
@@ -236,22 +230,22 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
               onClick={() => fileInputRef.current?.click()}
               className="text-xs font-semibold px-3 py-1 rounded-lg bg-slate-100 dark:bg-[#274858] text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white transition-colors border border-slate-200 dark:border-transparent"
             >
-              Fotoğrafı Değiştir
+              {t.changePhoto}
             </button>
             {user.avatarUrl && (
               <button
                 onClick={handleRemovePhoto}
                 className="text-xs font-semibold px-2 py-1 rounded-lg text-rose-600 dark:text-[#e8616b] hover:bg-rose-50 dark:hover:bg-[#e8616b]/15 transition-colors flex items-center gap-1"
-                title="Fotoğrafı Kaldır"
+                title={t.removePhoto}
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>Kaldır</span>
+                <span>{t.removePhoto}</span>
               </button>
             )}
           </div>
 
           <span className="text-[11px] text-slate-500 dark:text-slate-400">
-            Katılım: {joinedDateStr}
+            {t.joinedAt} {joinedDateStr}
           </span>
         </div>
 
@@ -261,7 +255,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
             <div className="mb-1">
               <KlasikAkce size={16} />
             </div>
-            <span className="text-[9px] uppercase font-bold text-slate-500 dark:text-slate-400">Bakiye</span>
+            <span className="text-[9px] uppercase font-bold text-slate-500 dark:text-slate-400">{t.akceBalance}</span>
             <span className="text-xs font-black text-[#d97706] dark:text-[#f2b544] font-mono mt-0.5">
               {formatAkce(liveAkce).split(',')[0]},{formatAkce(liveAkce).split(',')[1].slice(0, 2)}
             </span>
@@ -269,15 +263,15 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
 
           <div className="bg-slate-50 dark:bg-[#0e1f2b] p-2.5 rounded-2xl border border-slate-200 dark:border-[#274858] flex flex-col items-center text-center">
             <Flame className="w-4 h-4 text-[#e8616b] mb-1" />
-            <span className="text-[9px] uppercase font-bold text-slate-500 dark:text-slate-400">Günlük Seri</span>
+            <span className="text-[9px] uppercase font-bold text-slate-500 dark:text-slate-400">{t.dailyStreak}</span>
             <span className="text-xs font-black text-slate-900 dark:text-white mt-0.5">
-              {user.streak}. Gün
+              {user.streak}. {t.day}
             </span>
           </div>
 
           <div className="bg-slate-50 dark:bg-[#0e1f2b] p-2.5 rounded-2xl border border-slate-200 dark:border-[#274858] flex flex-col items-center text-center">
             <Trophy className="w-4 h-4 text-[#059669] dark:text-[#5fd3b3] mb-1" />
-            <span className="text-[9px] uppercase font-bold text-slate-500 dark:text-slate-400">Sıralama</span>
+            <span className="text-[9px] uppercase font-bold text-slate-500 dark:text-slate-400">{t.yourRank}</span>
             <span className="text-xs font-black text-[#059669] dark:text-[#5fd3b3] font-mono mt-0.5">
               #{currentUserRank}
             </span>
@@ -287,7 +281,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
         {/* Nickname Editor */}
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Takma Ad (Sıralamada görünür)
+            {t.nicknameLabel}
           </label>
           <div className="flex gap-2">
             <input
@@ -296,14 +290,14 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
               onChange={(e) => setNicknameInput(e.target.value)}
               maxLength={24}
               className="flex-1 px-3 py-2 rounded-xl bg-slate-50 dark:bg-[#0e1f2b] border border-slate-200 dark:border-[#274858] text-sm text-slate-900 dark:text-white font-semibold focus:outline-none focus:border-[#f2b544]"
-              placeholder="Takma adınız"
+              placeholder={t.nicknamePlaceholder}
             />
             <button
               onClick={handleSaveNickname}
               disabled={savingNick || nicknameInput.trim() === user.nickname}
               className="px-4 py-2 rounded-xl bg-[#f2b544] text-[#0e1f2b] font-bold text-xs hover:bg-[#e0a435] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 shrink-0"
             >
-              {nickSuccess ? <Check className="w-4 h-4 text-emerald-900" /> : 'Kaydet'}
+              {nickSuccess ? <Check className="w-4 h-4 text-emerald-900" /> : t.save}
             </button>
           </div>
         </div>
@@ -312,10 +306,10 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
         <div className="bg-slate-50 dark:bg-[#0e1f2b] p-3 rounded-2xl border border-slate-200 dark:border-[#274858] flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Davet Kodun
+              {t.yourInviteCode}
             </span>
             <span className="text-[10px] text-[#059669] dark:text-[#5fd3b3] font-semibold">
-              {user.invitedCount} kişi davet edildi
+              {t.invitedFriendsCount.replace('{count}', String(user.invitedCount))}
             </span>
           </div>
           <div className="flex items-center justify-between bg-white dark:bg-[#16303f] px-3 py-2 rounded-xl border border-slate-200 dark:border-[#274858]">
@@ -329,12 +323,12 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
               {copiedCode ? (
                 <>
                   <Check className="w-4 h-4 text-[#059669] dark:text-[#5fd3b3]" />
-                  <span className="text-[#059669] dark:text-[#5fd3b3]">Kopyalandı</span>
+                  <span className="text-[#059669] dark:text-[#5fd3b3]">{t.copied}</span>
                 </>
               ) : (
                 <>
                   <Copy className="w-4 h-4" />
-                  <span>Kopyala</span>
+                  <span>{t.copy}</span>
                 </>
               )}
             </button>
@@ -349,20 +343,20 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
               <div className="flex flex-col">
                 <span className="text-slate-900 dark:text-white font-medium truncate max-w-[170px]">{user.email}</span>
                 <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                  {user.emailVerified ? 'E-posta Doğrulandı' : 'E-posta Henüz Doğrulanmadı'}
+                  {user.emailVerified ? t.emailVerified : t.emailNotVerified}
                 </span>
               </div>
             </div>
             {user.emailVerified ? (
               <span className="text-[10px] font-bold text-[#059669] dark:text-[#5fd3b3] bg-emerald-50 dark:bg-[#5fd3b3]/20 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-[#5fd3b3]/30">
-                Doğrulandı
+                {t.protectedBadge}
               </span>
             ) : (
               <button
                 onClick={() => setShowEmailVerify(!showEmailVerify)}
                 className="text-[10px] font-bold text-[#d97706] dark:text-[#f2b544] underline"
               >
-                Kodu Gir
+                {t.enterCode}
               </button>
             )}
           </div>
@@ -382,7 +376,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
                 disabled={emailVerifyLoading}
                 className="px-3 py-1 bg-[#10b981] dark:bg-[#5fd3b3] text-white dark:text-[#0e1f2b] font-bold text-xs rounded-lg hover:opacity-90"
               >
-                {emailVerifyLoading ? '...' : 'Onayla'}
+                {emailVerifyLoading ? '...' : t.verifyAction}
               </button>
             </div>
           )}
@@ -392,22 +386,22 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
             <div className="flex items-center gap-2">
               <Phone className="w-4 h-4 text-slate-400" />
               <div className="flex flex-col">
-                <span className="text-slate-900 dark:text-white font-medium">Bot & Çift Hesap Önlemi</span>
+                <span className="text-slate-900 dark:text-white font-medium">{t.phoneProtectionTitle}</span>
                 <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                  {user.phoneVerified ? user.phone : 'Telefon ile adil birikim koruması'}
+                  {user.phoneVerified ? user.phone : t.phoneProtectionDesc}
                 </span>
               </div>
             </div>
             {user.phoneVerified ? (
               <span className="text-[10px] font-bold text-[#059669] dark:text-[#5fd3b3] bg-emerald-50 dark:bg-[#5fd3b3]/20 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-[#5fd3b3]/30">
-                Korumalı
+                {t.protectedBadge}
               </span>
             ) : (
               <button
                 onClick={() => setShowPhoneVerify(!showPhoneVerify)}
                 className="text-[10px] font-bold text-[#d97706] dark:text-[#f2b544] underline"
               >
-                Doğrula
+                {t.verifyAction}
               </button>
             )}
           </div>
@@ -426,38 +420,11 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, cur
                 disabled={phoneVerifyLoading}
                 className="px-3 py-1 bg-[#f2b544] text-[#0e1f2b] font-bold text-xs rounded-lg hover:opacity-90"
               >
-                {phoneVerifyLoading ? '...' : 'Kaydet'}
+                {phoneVerifyLoading ? '...' : t.save}
               </button>
             </div>
           )}
         </div>
-
-        {/* PWA Install Button */}
-        <button
-          onClick={() => setShowInstallModal(true)}
-          className="w-full mt-2 py-2.5 rounded-xl bg-amber-50 dark:bg-[#0e1f2b] border border-amber-300 dark:border-[#f2b544]/40 text-slate-900 dark:text-white hover:bg-amber-100 dark:hover:bg-[#274858] font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
-        >
-          <Download className="w-4 h-4 text-[#d97706] dark:text-[#f2b544]" />
-          <span>Telefona Yükle / Nasıl İndirilir?</span>
-        </button>
-
-        {/* Logout Button */}
-        <button
-          onClick={() => {
-            logout();
-            onClose();
-          }}
-          className="w-full py-2.5 rounded-xl border border-rose-300 dark:border-[#e8616b]/50 text-rose-600 dark:text-[#e8616b] hover:bg-rose-50 dark:hover:bg-[#e8616b]/15 font-bold text-xs flex items-center justify-center gap-2 transition-colors"
-        >
-          <LogOut className="w-4 h-4" />
-          <span>Çıkış Yap</span>
-        </button>
-
-        {/* PWA Install Guide Modal */}
-        <PWAInstallModal
-          isOpen={showInstallModal}
-          onClose={() => setShowInstallModal(false)}
-        />
       </div>
     </div>
   );

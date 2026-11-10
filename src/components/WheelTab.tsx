@@ -1,5 +1,6 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { SpinResult } from '../types';
 import { formatTimeCountdown, getServerNow } from '../services/api';
 import { Sparkles, Gift, Clock, AlertCircle } from 'lucide-react';
@@ -16,6 +17,7 @@ interface SliceDefinition {
 
 export const WheelTab: React.FC = () => {
   const { user, spinWheel } = useAuth();
+  const { t, language } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [spinning, setSpinning] = useState(false);
@@ -25,15 +27,15 @@ export const WheelTab: React.FC = () => {
   const [nextFreeRemainingMs, setNextFreeRemainingMs] = useState(0);
 
   // 7 slices with swapped positions (index 2: 2 çevirme, index 5: 0,3 akçe) and bold distinctive colors
-  const slices: SliceDefinition[] = [
-    { index: 0, label: '0,1', subLabel: 'akçe', isJoker: false, prob: '%50', bgColor: '#0f766e', textColor: '#ffffff' },
-    { index: 1, label: '0,2', subLabel: 'akçe', isJoker: false, prob: '%25', bgColor: '#1d4ed8', textColor: '#ffffff' },
-    { index: 2, label: '2', subLabel: 'çevirme', isJoker: true, prob: '%6', bgColor: '#0f172a', textColor: '#f2b544' },
-    { index: 3, label: '0,5', subLabel: 'akçe', isJoker: false, prob: '%5', bgColor: '#c026d3', textColor: '#ffffff' },
-    { index: 4, label: '1', subLabel: 'akçe', isJoker: false, prob: '%1', bgColor: '#f59e0b', textColor: '#0f172a' },
-    { index: 5, label: '0,3', subLabel: 'akçe', isJoker: false, prob: '%10', bgColor: '#b91c1c', textColor: '#ffffff' },
-    { index: 6, label: '3', subLabel: 'çevirme', isJoker: true, prob: '%3', bgColor: '#020617', textColor: '#fbbf24' },
-  ];
+  const slices: SliceDefinition[] = useMemo(() => [
+    { index: 0, label: '0,1', subLabel: t.akce, isJoker: false, prob: '%50', bgColor: '#0f766e', textColor: '#ffffff' },
+    { index: 1, label: '0,2', subLabel: t.akce, isJoker: false, prob: '%25', bgColor: '#1d4ed8', textColor: '#ffffff' },
+    { index: 2, label: '2', subLabel: t.extraSpin, isJoker: true, prob: '%6', bgColor: '#0f172a', textColor: '#f2b544' },
+    { index: 3, label: '0,5', subLabel: t.akce, isJoker: false, prob: '%5', bgColor: '#c026d3', textColor: '#ffffff' },
+    { index: 4, label: '1', subLabel: t.akce, isJoker: false, prob: '%1', bgColor: '#f59e0b', textColor: '#0f172a' },
+    { index: 5, label: '0,3', subLabel: t.akce, isJoker: false, prob: '%10', bgColor: '#b91c1c', textColor: '#ffffff' },
+    { index: 6, label: '3', subLabel: t.extraSpin, isJoker: true, prob: '%3', bgColor: '#020617', textColor: '#fbbf24' },
+  ], [t.akce, t.extraSpin]);
 
   const spinsAvailable = user?.wheel.spinsAvailable ?? 0;
   const lastDailySpinTime = user?.wheel.lastDailySpinTime ?? 0;
@@ -100,11 +102,11 @@ export const WheelTab: React.FC = () => {
       ctx.rotate(Math.PI / 2); // Orient text inward
 
       if (slice.isJoker) {
-        // Joker slice: dark background with gold text ("2 çevirme" or "3 çevirme")
+        // Joker slice: dark background with gold text ("2 çevirme" / "2 spins")
         ctx.textAlign = 'center';
         ctx.fillStyle = '#f2b544';
         ctx.font = 'bold 15px "Bricolage Grotesque", sans-serif';
-        ctx.fillText(`${slice.label} çevirme`, 0, -4);
+        ctx.fillText(`${slice.label} ${slice.subLabel}`, 0, -4);
 
         ctx.fillStyle = '#f2b544';
         ctx.font = 'bold 9px "Bricolage Grotesque", sans-serif';
@@ -118,7 +120,7 @@ export const WheelTab: React.FC = () => {
 
         ctx.fillStyle = slice.textColor === '#0f172a' ? '#1e293b' : 'rgba(255, 255, 255, 0.9)';
         ctx.font = 'bold 11px "Bricolage Grotesque", sans-serif';
-        ctx.fillText('akçe', 0, 12);
+        ctx.fillText(slice.subLabel, 0, 12);
       }
 
       ctx.restore();
@@ -152,7 +154,7 @@ export const WheelTab: React.FC = () => {
       const targetIndex = result.sliceIndex;
 
       // 2. Animate wheel to the winning slice
-      // Pointer is fixed at top (270 deg / -90 deg, which in canvas is -Math.PI / 2)
+      // Pointer is fixed at top (-Math.PI / 2)
       const sliceAngle = (2 * Math.PI) / slices.length;
       
       const topAngle = -Math.PI / 2;
@@ -174,7 +176,7 @@ export const WheelTab: React.FC = () => {
       const startTime = performance.now();
 
       // Ease out quartic function
-      const easeOut = (t: number) => 1 - Math.pow(1 - t, 4);
+      const easeOut = (tVal: number) => 1 - Math.pow(1 - tVal, 4);
 
       const animate = (now: number) => {
         const elapsed = now - startTime;
@@ -198,7 +200,7 @@ export const WheelTab: React.FC = () => {
       requestAnimationFrame(animate);
     } catch (err: unknown) {
       setSpinning(false);
-      setErrorMsg(err instanceof Error ? err.message : 'Çevirme sırasında bir hata oluştu.');
+      setErrorMsg(err instanceof Error ? err.message : (language === 'en' ? 'An error occurred during spin.' : 'Çevirme sırasında bir hata oluştu.'));
     }
   };
 
@@ -211,12 +213,12 @@ export const WheelTab: React.FC = () => {
             <Gift className="w-4 h-4" />
           </div>
           <div>
-            <div className="text-xs font-bold text-slate-900 dark:text-white">Günlük Şans Çarkı</div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400">Her 24 saatte 1 ücretsiz hak</div>
+            <div className="text-xs font-bold text-slate-900 dark:text-white">{t.wheelTitle}</div>
+            <div className="text-[11px] text-slate-500 dark:text-slate-400">{t.wheelSubtitle}</div>
           </div>
         </div>
         <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-100 dark:bg-[#0e1f2b] border border-slate-200 dark:border-[#274858]">
-          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Kalan Hak:</span>
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">{t.remainingSpins}</span>
           <span className="text-sm font-black text-[#d97706] dark:text-[#f2b544] font-mono">{spinsAvailable}</span>
         </div>
       </div>
@@ -245,7 +247,7 @@ export const WheelTab: React.FC = () => {
             className="w-[300px] h-[300px] rounded-full drop-shadow-xl"
           />
 
-          {/* Center circular coral button: exactly says "Çevir" */}
+          {/* Center circular coral button */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <button
               onClick={handleSpin}
@@ -255,9 +257,9 @@ export const WheelTab: React.FC = () => {
                   ? 'opacity-85 cursor-not-allowed bg-slate-400 border-slate-200 dark:bg-slate-600 dark:border-slate-700'
                   : 'cursor-pointer animate-pulse'
               }`}
-              aria-label="Çarkı çevir"
+              aria-label={t.spinButton}
             >
-              Çevir
+              {t.spinButton}
             </button>
           </div>
         </div>
@@ -266,7 +268,7 @@ export const WheelTab: React.FC = () => {
         {spinsAvailable <= 0 && nextFreeRemainingMs > 0 && (
           <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-[#16303f] border border-slate-200 dark:border-[#274858] text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-xs">
             <Clock className="w-3.5 h-3.5 text-[#d97706] dark:text-[#f2b544]" />
-            <span>Yeni hak için kalan:</span>
+            <span>{t.nextFreeSpin}</span>
             <span className="font-mono text-[#d97706] dark:text-[#f2b544] font-bold">
               {formatTimeCountdown(nextFreeRemainingMs)}
             </span>
@@ -279,17 +281,17 @@ export const WheelTab: React.FC = () => {
         <div className="bg-white dark:bg-gradient-to-r dark:from-[#16303f] dark:via-[#1f4357] dark:to-[#16303f] border-2 border-amber-400 dark:border-[#f2b544] rounded-2xl p-4 text-center shadow-lg animate-scale-in">
           <div className="inline-flex items-center gap-1.5 text-[#d97706] dark:text-[#f2b544] text-xs font-bold uppercase tracking-wider mb-1">
             <Sparkles className="w-4 h-4" />
-            <span>Tebrikler! Kazandınız</span>
+            <span>{t.congratsWon}</span>
           </div>
           <div className="text-2xl font-black text-slate-900 dark:text-white my-1 font-mono">
             {wonPrize.prizeType === 'akce'
-              ? `+${wonPrize.prizeValue} akçe`
-              : `+${wonPrize.prizeValue} Ekstra Çevirme!`}
+              ? `+${wonPrize.prizeValue} ${t.akce}`
+              : `+${wonPrize.prizeValue} ${language === 'en' ? 'Extra Spins!' : 'Ekstra Çevirme!'}`}
           </div>
           <div className="text-xs text-slate-600 dark:text-slate-300">
             {wonPrize.prizeType === 'akce'
-              ? 'Kazanılan akçe anında bakiyenize eklendi.'
-              : 'Joker hakkı ile çarkı tekrar çevirebilirsiniz!'}
+              ? t.wonAkceDesc
+              : t.wonSpinsDesc}
           </div>
         </div>
       )}

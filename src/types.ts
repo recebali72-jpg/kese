@@ -43,6 +43,7 @@ export interface GlobalStats {
   registeredCount: number;
   activeMinersCount: number;
   activeRatePercent: number;
+  totalAkce: number;
 }
 
 export type TabType = 'mining' | 'wheel' | 'leaderboard' | 'about';

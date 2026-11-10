@@ -1,5 +1,6 @@
 import React from 'react';
 import { TabType } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 import { Disc, Trophy, Info } from 'lucide-react';
 import { KeseIcon } from './KeseIcon';
 
@@ -10,11 +11,13 @@ interface NavigationProps {
 }
 
 export const Navigation: React.FC<NavigationProps> = ({ currentTab, onTabChange, isMiningActive }) => {
+  const { t } = useLanguage();
+
   const tabs: { id: TabType; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-    { id: 'mining', label: 'Kese', icon: KeseIcon },
-    { id: 'wheel', label: 'Çark', icon: Disc },
-    { id: 'leaderboard', label: 'Sıralama', icon: Trophy },
-    { id: 'about', label: 'Hakkında', icon: Info },
+    { id: 'mining', label: t.tabPouch, icon: KeseIcon },
+    { id: 'wheel', label: t.tabWheel, icon: Disc },
+    { id: 'leaderboard', label: t.tabLeaderboard, icon: Trophy },
+    { id: 'about', label: t.tabAbout, icon: Info },
   ];
 
   return (
